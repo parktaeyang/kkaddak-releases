@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-i18n="title">Kkaddak(까딱) — 손짓으로 Mac 조작하기</title>
+<meta name="description" content="카메라로 손 제스처를 인식해 키 입력으로 바꿔주는 무료 macOS 메뉴바 앱. 손바닥 들기, 손가락으로 가리키기, 주먹 밀기로 게임과 앱을 조작하세요.">
+<link rel="canonical" href="https://parktaeyang.github.io/kkaddak-releases/">
+<link rel="icon" type="image/png" href="assets/icon.png">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://parktaeyang.github.io/kkaddak-releases/">
+<meta property="og:site_name" content="Kkaddak">
+<meta property="og:title" content="Kkaddak(까딱) — 손짓으로 Mac 조작하기">
+<meta property="og:description" content="카메라로 손 제스처를 인식해 키 입력으로 바꿔주는 무료 macOS 메뉴바 앱. 손바닥 들기, 손가락으로 가리키기, 주먹 밀기로 게임과 앱을 조작하세요.">
+<meta property="og:image" content="https://parktaeyang.github.io/kkaddak-releases/assets/icon.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Kkaddak(까딱) — 손짓으로 Mac 조작하기">
+<meta name="twitter:description" content="카메라로 손 제스처를 인식해 키 입력으로 바꿔주는 무료 macOS 메뉴바 앱. 손바닥 들기, 손가락으로 가리키기, 주먹 밀기로 게임과 앱을 조작하세요.">
+<meta name="twitter:image" content="https://parktaeyang.github.io/kkaddak-releases/assets/icon.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Kkaddak",
+  "operatingSystem": "macOS",
+  "applicationCategory": "UtilitiesApplication",
+  "description": "카메라로 손 제스처를 인식해 키 입력으로 바꿔주는 무료 macOS 메뉴바 앱.",
+  "url": "https://parktaeyang.github.io/kkaddak-releases/",
+  "image": "https://parktaeyang.github.io/kkaddak-releases/assets/icon.png",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>
+
+<style>
+  :root {
+    --bg: #f4f4f6;
+    --card: #ffffff;
+    --ink: #1b1e26;
+    --muted: #5b5f6b;
+    --accent: #3f4bd2;
+    --accent-ink: #ffffff;
+    --footer-bg: #1c1f26;
+    --footer-ink: #e7e8ec;
+    --border: #e2e3e8;
+    --langbar-bg: #eef0f7;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", sans-serif;
+    line-height: 1.6;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+
+  .langbar {
+    background: var(--langbar-bg);
+    border-bottom: 1px solid var(--border);
+  }
+  .langbar-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 10px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 6px;
+  }
+  .lang-group { display: flex; gap: 6px; }
+  .lang-btn {
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-size: 0.85rem;
+    padding: 5px 12px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .lang-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-ink);
+    font-weight: 600;
+  }
+  .gh-star-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--ink);
+    font-size: 0.85rem;
+    padding: 5px 12px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .gh-star-btn:hover { border-color: var(--accent); }
+  .gh-star-btn .count {
+    color: var(--muted);
+    border-left: 1px solid var(--border);
+    padding-left: 8px;
+    margin-left: 2px;
+    font-weight: 600;
+  }
+
+  header.hero {
+    padding: 56px 0 48px;
+    text-align: center;
+  }
+  header.hero img.icon {
+    width: 116px;
+    height: 116px;
+    margin-bottom: 20px;
+  }
+  header.hero h1 {
+    font-size: 2.4rem;
+    margin: 0 0 12px;
+    letter-spacing: -0.01em;
+  }
+  header.hero h1 .ko { font-weight: 500; color: var(--muted); font-size: 1.6rem; margin-left: 6px; }
+  header.hero p.tagline {
+    font-size: 1.15rem;
+    color: var(--muted);
+    max-width: 560px;
+    margin: 0 auto 32px;
+  }
+
+  .download-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+  }
+  .download-col { display: flex; flex-direction: column; align-items: center; }
+  .download-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.05rem;
+    padding: 16px 32px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(63, 75, 210, 0.28);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .download-btn:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(63, 75, 210, 0.35); }
+  .download-meta {
+    margin-top: 12px;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .star-ask {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+
+  section { padding: 40px 0; }
+
+  h2 {
+    font-size: 1.4rem;
+    margin: 0 0 20px;
+    text-align: center;
+  }
+  .section-intro {
+    text-align: center;
+    color: var(--muted);
+    margin: -8px 0 24px;
+  }
+
+  .gestures {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    font-size: 0.95rem;
+  }
+  .gestures th, .gestures td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  .gestures tr:last-child td { border-bottom: none; }
+  .gestures th { color: var(--muted); font-weight: 600; font-size: 0.85rem; }
+  .gestures td.emoji { font-size: 1.4rem; width: 56px; text-align: center; }
+  .gestures td.how { color: var(--muted); font-size: 0.88rem; }
+  kbd {
+    display: inline-block;
+    min-width: 1.8em;
+    padding: 2px 8px;
+    border: 1px solid var(--border);
+    border-bottom-width: 2px;
+    border-radius: 6px;
+    background: var(--bg);
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .features {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 24px;
+  }
+  .features li {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 0.95rem;
+  }
+  .features li strong { display: block; margin-bottom: 2px; }
+
+  h3.os-subheading {
+    font-size: 1.05rem;
+    color: var(--muted);
+    text-align: center;
+    margin: 0 0 12px;
+  }
+
+  .install-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px 32px;
+  }
+  .install-card ol { margin: 0; padding-left: 22px; }
+  .install-card li { margin-bottom: 14px; }
+  .install-card li:last-child { margin-bottom: 0; }
+  .install-card ul li { margin-bottom: 6px; }
+  .install-card .note {
+    margin-top: 20px;
+    padding: 14px 16px;
+    background: #eef0fc;
+    border: 1px solid #d3d7f5;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    color: #2f3780;
+  }
+  .install-card .note.update {
+    background: #fdf4e3;
+    border-color: #f0dcae;
+    color: #7a5a1e;
+  }
+
+  .changelog { display: flex; flex-direction: column; gap: 16px; }
+  .release {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 24px;
+  }
+  .release-head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .release-tag { font-weight: 700; font-size: 1rem; color: var(--accent); }
+  .release-date { font-size: 0.8rem; color: var(--muted); }
+  .release ul { margin: 0; padding-left: 20px; }
+  .release li { font-size: 0.92rem; margin-bottom: 6px; }
+  .release li:last-child { margin-bottom: 0; }
+
+  footer {
+    background: var(--footer-bg);
+    color: var(--footer-ink);
+    padding: 32px 0;
+    margin-top: 40px;
+    text-align: center;
+    font-size: 0.85rem;
+  }
+  footer a { color: var(--footer-ink); }
+
+  @media (max-width: 620px) {
+    header.hero { padding: 40px 0 32px; }
+    header.hero h1 { font-size: 1.9rem; }
+    .features { grid-template-columns: 1fr; }
+    .gestures td.how, .gestures th.how-h { display: none; }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #16181d;
+      --card: #1f222a;
+      --ink: #f0f1f4;
+      --muted: #9a9daa;
+      --accent: #6f79f0;
+      --border: #2c2f38;
+      --langbar-bg: #1c1f26;
+    }
+    .install-card .note { background: #1d2150; border-color: #2e3578; color: #c9cdf6; }
+    .install-card .note.update { background: #3a2f18; border-color: #5c4a22; color: #e6d3a8; }
+  }
+</style>
+</head>
+<body>
+
+<div class="langbar">
+  <div class="langbar-inner">
+    <a class="gh-star-btn" href="https://github.com/parktaeyang/kkaddak-releases" target="_blank" rel="noopener">
+      ★ <span data-i18n="star_label"></span>
+      <span class="count" id="star-count">–</span>
+    </a>
+    <div class="lang-group">
+      <button class="lang-btn" id="lang-btn-ko" onclick="setLang('ko')">한국어</button>
+      <button class="lang-btn" id="lang-btn-en" onclick="setLang('en')">English</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <header class="hero">
+    <img class="icon" src="assets/icon.png" data-i18n-attr="icon_alt" alt="Kkaddak 아이콘">
+    <h1>Kkaddak<span class="ko">까딱</span></h1>
+    <p class="tagline" data-i18n="tagline"></p>
+    <div class="download-row">
+      <div class="download-col">
+        <a class="download-btn" id="download-link-mac" href="https://github.com/parktaeyang/kkaddak-releases/releases/latest" data-i18n="download_btn_mac"></a>
+        <div class="download-meta" id="download-meta-mac" data-i18n="download_meta_default"></div>
+      </div>
+    </div>
+    <p class="star-ask" data-i18n="star_ask"></p>
+  </header>
+
+  <section>
+    <h2 data-i18n="gestures_heading"></h2>
+    <p class="section-intro" data-i18n="gestures_intro"></p>
+    <table class="gestures">
+      <thead>
+        <tr><th></th><th data-i18n="col_gesture"></th><th class="how-h" data-i18n="col_how"></th><th data-i18n="col_default"></th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="emoji">✋</td><td data-i18n="g_palm"></td><td class="how" data-i18n="g_palm_how"></td><td><kbd>Space</kbd></td></tr>
+        <tr><td class="emoji">👈</td><td data-i18n="g_left"></td><td class="how" data-i18n="g_point_how"></td><td><kbd>←</kbd></td></tr>
+        <tr><td class="emoji">👉</td><td data-i18n="g_right"></td><td class="how" data-i18n="g_point_how"></td><td><kbd>→</kbd></td></tr>
+        <tr><td class="emoji">☝️</td><td data-i18n="g_up"></td><td class="how" data-i18n="g_point_how"></td><td><kbd>↑</kbd></td></tr>
+        <tr><td class="emoji">👇</td><td data-i18n="g_down"></td><td class="how" data-i18n="g_point_how"></td><td><kbd>↓</kbd></td></tr>
+        <tr><td class="emoji">✌️</td><td data-i18n="g_two_up"></td><td class="how" data-i18n="g_two_how"></td><td><kbd>Page Up</kbd></td></tr>
+        <tr><td class="emoji">✌️</td><td data-i18n="g_two_down"></td><td class="how" data-i18n="g_two_how"></td><td><kbd>Page Down</kbd></td></tr>
+        <tr><td class="emoji">🤜</td><td data-i18n="g_push_right"></td><td class="how" data-i18n="g_push_how"></td><td><kbd>S</kbd></td></tr>
+        <tr><td class="emoji">🤛</td><td data-i18n="g_push_left"></td><td class="how" data-i18n="g_push_how"></td><td><kbd>A</kbd></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2 data-i18n="features_heading"></h2>
+    <ul class="features">
+      <li><strong data-i18n="feature_menubar_title"></strong><span data-i18n="feature_menubar_desc"></span></li>
+      <li><strong data-i18n="feature_bindings_title"></strong><span data-i18n="feature_bindings_desc"></span></li>
+      <li><strong data-i18n="feature_hold_title"></strong><span data-i18n="feature_hold_desc"></span></li>
+      <li><strong data-i18n="feature_mc_title"></strong><span data-i18n="feature_mc_desc"></span></li>
+      <li><strong data-i18n="feature_privacy_title"></strong><span data-i18n="feature_privacy_desc"></span></li>
+      <li><strong data-i18n="feature_free_title"></strong><span data-i18n="feature_free_desc"></span></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2 data-i18n="install_heading"></h2>
+    <h3 class="os-subheading" data-i18n="install_mac_subheading"></h3>
+    <div class="install-card">
+      <ol>
+        <li data-i18n="install_step1"></li>
+        <li>
+          <span data-i18n="install_step2"></span>
+          <ul>
+            <li data-i18n="install_step2_a"></li>
+            <li data-i18n="install_step2_b"></li>
+          </ul>
+        </li>
+        <li data-i18n="install_step3"></li>
+        <li data-i18n="install_step4"></li>
+      </ol>
+      <div class="note" data-i18n="install_note"></div>
+      <div class="note update" data-i18n="install_update_note"></div>
+    </div>
+  </section>
+
+  <section>
+    <h2 data-i18n="changelog_heading"></h2>
+    <div class="changelog">
+      <div class="release">
+        <div class="release-head">
+          <span class="release-tag">v1.0.0</span>
+          <span class="release-date">2026-11-02</span>
+        </div>
+        <ul data-i18n="changelog_v1_0_0"></ul>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer data-i18n="footer"></footer>
+
+<script>
+  var STRINGS = {
+    ko: {
+      title: "Kkaddak(까딱) — 손짓으로 Mac 조작하기",
+      description: "카메라로 손 제스처를 인식해 키 입력으로 바꿔주는 무료 macOS 메뉴바 앱. 손바닥 들기, 손가락으로 가리키기, 주먹 밀기로 게임과 앱을 조작하세요.",
+      icon_alt: "Kkaddak 아이콘",
+      star_label: "GitHub에서 스타",
+      star_ask: "맘에 든다면 깃헙스타 한번 눌러주세요 🌟",
+      tagline: "Mac 카메라로 손 제스처를 인식해 키 입력으로 바꿔주는 메뉴바 앱. 손바닥을 들고, 손가락으로 가리키고, 주먹을 내밀어 게임과 앱을 조작하세요. 완전 무료.",
+      download_btn_mac: "⬇ 다운로드 (macOS)",
+      download_meta_default: "최신 버전 · Apple Silicon 전용 · .dmg",
+      gestures_heading: "제스처",
+      gestures_intro: "각 제스처의 동작은 메뉴바 아이콘에서 원하는 키로 바꿀 수 있습니다.",
+      col_gesture: "제스처",
+      col_how: "하는 법",
+      col_default: "기본 입력",
+      g_palm: "손바닥 들기",
+      g_palm_how: "다섯 손가락을 펴서 위로 들고 0.5초",
+      g_left: "왼쪽 가리키기",
+      g_right: "오른쪽 가리키기",
+      g_up: "위쪽 가리키기",
+      g_down: "아래쪽 가리키기",
+      g_point_how: "검지만 펴서 가리키고 0.3초",
+      g_two_up: "두 손가락 위로",
+      g_two_down: "두 손가락 아래로",
+      g_two_how: "검지·중지만 펴서 가리키고 0.3초",
+      g_push_right: "오른손 주먹 밀기",
+      g_push_left: "왼손 주먹 밀기",
+      g_push_how: "주먹을 쥐고 카메라 쪽으로 빠르게 내밀기",
+      features_heading: "기능",
+      feature_menubar_title: "메뉴바 앱",
+      feature_menubar_desc: "창 없이 메뉴바 아이콘으로 인식 상태 표시, 켜기/끄기",
+      feature_bindings_title: "제스처별 키 설정",
+      feature_bindings_desc: "제스처마다 원하는 키·단축키(⌘, ⇧ 조합 포함) 지정",
+      feature_hold_title: "게임에서도 동작",
+      feature_hold_desc: "자세를 유지하는 동안 키를 누르고 있어 게임에서도 인식",
+      feature_mc_title: "Mission Control",
+      feature_mc_desc: "키 대신 Mission Control 실행도 선택 가능",
+      feature_privacy_title: "기기 안에서만 처리",
+      feature_privacy_desc: "카메라 영상은 Mac 안에서만 분석하며 저장·전송하지 않음",
+      feature_free_title: "완전 무료",
+      feature_free_desc: "광고·로그인 없이 바로 사용",
+      install_heading: "설치 방법",
+      install_mac_subheading: "macOS 13 이상 · Apple Silicon (M1 이후) · 카메라 필요",
+      install_step1: "<strong>Kkaddak.dmg</strong>를 다운로드해 연 다음, <strong>Kkaddak.app</strong>을 <strong>Applications</strong> 폴더로 드래그하세요.",
+      install_step2: "처음 실행하면 \"Apple에서 악성 코드가 있는지 확인할 수 없습니다\" 경고가 뜰 수 있습니다 — 개인 개발자가 배포하는 무료 앱이라 애플 정식 서명·공증을 아직 받지 않아서 그렇습니다.",
+      install_step2_a: "<strong>시스템 설정 → 개인정보 보호 및 보안</strong> → 아래로 스크롤 → \"Kkaddak\"이 차단됨 옆 <strong>그래도 열기</strong> → 암호 입력",
+      install_step2_b: "이전 macOS에서는 Finder에서 앱 아이콘을 <strong>control+클릭(우클릭) → 열기</strong> → <strong>열기</strong>로도 실행할 수 있습니다.",
+      install_step3: "실행하면 메뉴바에 ✋ 아이콘이 나타나고 <strong>카메라</strong> 권한을 묻습니다 — <strong>허용</strong>을 누르세요.",
+      install_step4: "키 입력을 보내려면 <strong>손쉬운 사용</strong> 권한이 필요합니다. <strong>시스템 설정 → 개인정보 보호 및 보안 → 손쉬운 사용</strong>에서 Kkaddak을 켠 뒤, 메뉴바 아이콘 → <strong>재시작</strong>을 누르세요. (권한은 앱을 다시 시작해야 적용됩니다)",
+      install_note: "💡 손이 카메라에 잘 보이도록 밝은 곳에서 사용하세요. 한글 입력 상태에서는 <kbd>S</kbd>가 <kbd>ㄴ</kbd>으로 입력되는 등 실제 키보드와 똑같이 동작합니다.",
+      install_update_note: "⚠️ <strong>새 버전으로 업데이트할 때:</strong> 정식 애플 서명이 없어 macOS가 새 버전을 다른 앱으로 인식하므로 권한이 이어지지 않습니다. 새 버전에서 <strong>제스처는 인식되는데 키 입력이 안 되면</strong>, <strong>시스템 설정 → 개인정보 보호 및 보안 → 손쉬운 사용</strong>에서 기존 \"Kkaddak\" 항목을 <strong>–</strong> 버튼으로 지우고, 새 <strong>Kkaddak.app</strong>을 <strong>+</strong>로 다시 추가해 켠 뒤 메뉴바 아이콘 → <strong>재시작</strong>을 누르세요. 카메라가 켜지지 않으면 카메라 권한도 같은 방법으로 확인하세요.",
+      changelog_heading: "버전별 변경 내용",
+      changelog_v1_0_0: "<li>첫 공개 릴리스 — 손바닥 들기, 상하좌우 가리키기, 두 손가락 위/아래, 양손 주먹 밀기 제스처와 제스처별 키 설정, 메뉴바 앱.</li>",
+      footer: "Kkaddak(까딱) · 개인 개발 프로젝트, 완전 무료 배포"
+    },
+    en: {
+      title: "Kkaddak — Control your Mac with hand gestures",
+      description: "A free macOS menu bar app that turns hand gestures seen by your camera into key presses. Raise your palm, point, or punch toward the camera to control games and apps.",
+      icon_alt: "Kkaddak icon",
+      star_label: "Star on GitHub",
+      star_ask: "If you like it, please hit the GitHub star button 🌟",
+      tagline: "A menu bar app that turns hand gestures from your Mac's camera into key presses. Raise your palm, point a finger, or punch toward the camera to control games and apps — completely free.",
+      download_btn_mac: "⬇ Download (macOS)",
+      download_meta_default: "Latest version · Apple Silicon only · .dmg",
+      gestures_heading: "Gestures",
+      gestures_intro: "You can change the key for every gesture from the menu bar icon.",
+      col_gesture: "Gesture",
+      col_how: "How",
+      col_default: "Default key",
+      g_palm: "Raise palm",
+      g_palm_how: "Open all five fingers, hold up for 0.5s",
+      g_left: "Point left",
+      g_right: "Point right",
+      g_up: "Point up",
+      g_down: "Point down",
+      g_point_how: "Extend only your index finger, hold 0.3s",
+      g_two_up: "Two fingers up",
+      g_two_down: "Two fingers down",
+      g_two_how: "Extend index + middle finger, hold 0.3s",
+      g_push_right: "Right fist push",
+      g_push_left: "Left fist push",
+      g_push_how: "Make a fist and push it quickly toward the camera",
+      features_heading: "Features",
+      feature_menubar_title: "Menu bar app",
+      feature_menubar_desc: "No windows — the menu bar icon shows status and turns it on/off",
+      feature_bindings_title: "Per-gesture keys",
+      feature_bindings_desc: "Assign any key or shortcut (with ⌘, ⇧ etc.) to each gesture",
+      feature_hold_title: "Works in games",
+      feature_hold_desc: "Keys stay held while you hold the pose, so games pick them up",
+      feature_mc_title: "Mission Control",
+      feature_mc_desc: "Optionally open Mission Control instead of a key",
+      feature_privacy_title: "On-device only",
+      feature_privacy_desc: "Camera frames are analyzed on your Mac — never saved or sent",
+      feature_free_title: "Completely free",
+      feature_free_desc: "No ads, no sign-in",
+      install_heading: "Installation",
+      install_mac_subheading: "macOS 13+ · Apple Silicon (M1 or later) · camera required",
+      install_step1: "Download <strong>Kkaddak.dmg</strong>, open it, then drag <strong>Kkaddak.app</strong> into your <strong>Applications</strong> folder.",
+      install_step2: "On first launch you may see \"Apple could not verify Kkaddak is free of malware\" — this app is distributed by an individual developer without an official Apple signature and notarization yet.",
+      install_step2_a: "<strong>System Settings → Privacy &amp; Security</strong> → scroll down → click <strong>Open Anyway</strong> next to the blocked \"Kkaddak\" → enter your password",
+      install_step2_b: "On older macOS versions you can also <strong>control-click (right-click) → Open</strong> the app in Finder → <strong>Open</strong>.",
+      install_step3: "A ✋ icon appears in the menu bar and macOS asks for <strong>Camera</strong> access — click <strong>Allow</strong>.",
+      install_step4: "Sending keys needs <strong>Accessibility</strong> permission. Turn on Kkaddak in <strong>System Settings → Privacy &amp; Security → Accessibility</strong>, then click the menu bar icon → <strong>재시작 (Restart)</strong>. (The permission takes effect after a restart.)",
+      install_note: "💡 Use it in a well-lit place so your hand is clearly visible. Keys behave exactly like a real keyboard — e.g. with a Korean input source, <kbd>S</kbd> types <kbd>ㄴ</kbd>.",
+      install_update_note: "⚠️ <strong>When updating to a new version:</strong> without an official Apple signature, macOS treats each new build as a different app, so permissions don't carry over. If gestures are detected <strong>but no keys come through</strong>, open <strong>System Settings → Privacy &amp; Security → Accessibility</strong>, remove the old \"Kkaddak\" entry with <strong>–</strong>, add the new <strong>Kkaddak.app</strong> with <strong>+</strong> and enable it, then click the menu bar icon → <strong>재시작 (Restart)</strong>. If the camera doesn't turn on, check the Camera permission the same way.",
+      changelog_heading: "Changelog",
+      changelog_v1_0_0: "<li>First public release — raise palm, point in four directions, two fingers up/down, and left/right fist push gestures, per-gesture key settings, menu bar app.</li>",
+      footer: "Kkaddak · An independent project, distributed completely free"
+    }
+  };
+
+  function setLang(lang) {
+    if (!STRINGS[lang]) lang = "ko";
+    var dict = STRINGS[lang];
+
+    document.querySelectorAll("[data-i18n]").forEach(function (el) {
+      var key = el.getAttribute("data-i18n");
+      if (dict[key] !== undefined) el.innerHTML = dict[key];
+    });
+    document.querySelectorAll("[data-i18n-attr]").forEach(function (el) {
+      var key = el.getAttribute("data-i18n-attr");
+      if (dict[key] !== undefined) el.setAttribute("alt", dict[key]);
+    });
+
+    document.title = dict.title;
+    var descMeta = document.querySelector('meta[name="description"]');
+    if (descMeta) descMeta.setAttribute("content", dict.description);
+    document.documentElement.setAttribute("lang", lang);
+
+    document.getElementById("lang-btn-ko").classList.toggle("active", lang === "ko");
+    document.getElementById("lang-btn-en").classList.toggle("active", lang === "en");
+
+    try { localStorage.setItem("kkaddak-lang", lang); } catch (e) {}
+  }
+
+  function initialLang() {
+    try {
+      var stored = localStorage.getItem("kkaddak-lang");
+      if (stored) return stored;
+    } catch (e) {}
+    return navigator.language && navigator.language.toLowerCase().indexOf("ko") === 0 ? "ko" : "en";
+  }
+
+  setLang(initialLang());
+
+  // 다운로드 버튼을 최신 GitHub Release의 .dmg로 연결하고 버전·크기를 표시한다.
+  // 실패하면 기본 링크(릴리스 페이지)가 그대로 남는다.
+  (function () {
+    var owner = "parktaeyang";
+    var repo = "kkaddak-releases";
+    fetch("https://api.github.com/repos/" + owner + "/" + repo + "/releases/latest")
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        var assets = data.assets || [];
+        var tag = data.tag_name || "";
+        var macAsset = assets.find(function (a) { return /\.dmg$/i.test(a.name); });
+        if (macAsset) {
+          var link = document.getElementById("download-link-mac");
+          link.href = macAsset.browser_download_url;
+          link.setAttribute("download", "");
+          document.getElementById("download-meta-mac").textContent =
+            tag + " · Apple Silicon · " + (macAsset.size / (1024 * 1024)).toFixed(1) + " MB";
+        }
+      })
+      .catch(function () {});
+  })();
+
+  // GitHub 스타 수
+  (function () {
+    fetch("https://api.github.com/repos/parktaeyang/kkaddak-releases")
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (typeof data.stargazers_count === "number") {
+          document.getElementById("star-count").textContent = data.stargazers_count;
+        }
+      })
+      .catch(function () {});
+  })();
+</script>
+
+</body>
+</html>
